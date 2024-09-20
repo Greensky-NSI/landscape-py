@@ -22,9 +22,9 @@ weat_stem_default_color: color_type = (200, 150, 50)
 weat_cobs_default_color: color_type = (255, 205, 105)
 
 # Variables globales
-fond=255
-nb_etoiles = None
-liste_etoiles = []
+fond: int = 255
+nb_etoiles: int = 0
+liste_etoiles: List[int] = []
 
 # Assert functions
 def assert_color(col: color_type):
@@ -33,6 +33,8 @@ def assert_color(col: color_type):
 def assert_color_mode(mode: str):
     return mode in ["maximum", "modulo"]
 
+def assert_size_factor(test_size):
+    return (isinstance(test_size, float) or isinstance(test_size, int)) and test_size > 0
 
 # Utils
 def frame_number(number: int | float, *, maximum: int | float = 100, minimum: int | float = 0):
@@ -176,8 +178,8 @@ def cloud(*, x: int = 0, y: int = 0, scalar: int = 100, cloud_color: color_type 
     assert isinstance(y, int), "y doit être un entier"
     assert isinstance(scalar, int) and scalar > 0, "scalar doit être un entier et supérieur à 0"
     assert assert_color(cloud_color), "cloud_color doit être un tuple de 3 entiers."
-    assert (isinstance(cloud_size, float) or isinstance(cloud_size, int)) and cloud_size > 0, "cloud_size doit être un réel/entier et supérieur à 0"
-    assert (isinstance(repeat_distance, float) or isinstance(repeat_distance, int)) and 0 < repeat_distance, "repeat_distance doit être un réel/entier et 0 < repeat_distance"
+    assert assert_size_factor(cloud_size), "cloud_size doit être un réel/entier et supérieur à 0"
+    assert assert_size_factor(repeat_distance), "repeat_distance doit être un réel/entier et 0 < repeat_distance"
     assert isinstance(repeated, bool), "repeated doit être un booléen"
     assert isinstance(pi_count, int) and pi_count >= 0, "pi_count doit être un entier et supérieur ou égal à 0"
     assert assert_color_mode(cloud_color_variation_mode), "cloud_color_variation_mode doit être soit : \"maximum\", \"modulo\""
@@ -247,7 +249,7 @@ def tree(*, x: int, y: int, tree_size: float = 1, trunc_color: color_type = (131
     # Assertions
     assert isinstance(x, int), "x doit être un entier"
     assert isinstance(y, int), "y doit être un entier"
-    assert (isinstance(tree_size, float) or isinstance(tree_size, int)) and tree_size > 0, "cloud_size doit être un réel/entier et supérieur à 0"
+    assert assert_size_factor(tree_size), "cloud_size doit être un réel/entier et supérieur à 0"
     assert assert_color(trunc_color), "trunc_color doit être un tuple de 3 entiers."
     assert assert_color(leaf_color), "leaf_color doit être un tuple de 3 entiers."
 
@@ -294,46 +296,94 @@ def tree(*, x: int, y: int, tree_size: float = 1, trunc_color: color_type = (131
     # Feuilles
     cloud(x=int(x + 40 * tree_size), y=int(y - 300 * tree_size), scalar=100, cloud_color=leaf_color, cloud_size=tree_size / 2, repeat_distance=tree_size / 2, color_variation=leaf_color_variation, cloud_color_variation_mode="maximum")
 
-def weat_field(*, x: int, y: int, weat_field_size: float = 1, width: int, height: int, stem_color: color_type = weat_stem_default_color, cobs_color: color_type = weat_cobs_default_color, field_bg_color: color_type = (255, 176, 7), weats_positions_list: positions_list = []):
+def weat_field(*, x: int, y: int, weat_size: float = 1, width: int, height: int, stem_color: color_type = weat_stem_default_color, cobs_color: color_type = weat_cobs_default_color, field_bg_color: color_type = (255, 176, 7), weats_positions_list: positions_list = []):
+    """
+    Crée un champ de blé à partir de la fonction weat
+
+    :param x: int - La position x du champ de blé
+    :param y: int - La position y du champ de blé
+    :param weat_size: float - L'échelle de taille des tiges de blé. Par défaut : 1
+    :param width: int - La largeur du champ de blé
+    :param height: int - La hauteur du champ de blé
+    :param stem_color: color_type - La couleur des tiges de blé. Par défaut : (200, 150, 50)
+    :param cobs_color: color_type - La couleur des épis de blé. Par défaut : (255, 205, 105)
+    :param field_bg_color: color_type - La couleur de fond du champ de blé. Par défaut : (255, 176, 7)
+    :param weats_positions_list: List[Tuple[int, int], ...] - La liste des positions des tiges de blé. Par défaut : []. Ne pas modifier, le système s'occupe de le remplir
+
+    :return: None
+    """
+
+    # Assertions
+    assert isinstance(x, int), "x doit être un entier"
+    assert isinstance(y, int), "y doit être un entier"
+    assert assert_size_factor(weat_size), "test_size doit être un réel/entier et supérieur à 0"
+    assert isinstance(width, int), "width doit être un entier"
+    assert isinstance(height, int), "height doit être un entier"
+    assert assert_color(stem_color), "stem_color doit être un tuple de 3 entiers."
+    assert assert_color(cobs_color), "cobs_color doit être un tuple de 3 entiers."
+    assert assert_color(field_bg_color), "field_bg_color doit être un tuple de 3 entiers."
+    assert isinstance(weats_positions_list, list), "weats_positions_list doit être une liste"
+
+    # Dessin du champ de blé
     noStroke()
     fill(*field_bg_color)
     rect(x, y, width, height)
 
+    # Calcul du nombre de tiges de blé maximum
     def tiges_maximum(rayon):
         return floor(height / rayon) * floor(width / rayon)
 
-    ecartement = .1 * max(width, height)
+    ecartement = .1 * max(width, height) # Calcul de l'écartement entre les tiges de blé
 
-    while len(weats_positions_list) < floor(tiges_maximum(ecartement) * .8):       # Version améliorée
-    # while len(liste_positions) < 20:                                        # Version simplifiée
+    # Création des tiges de blé
+    while len(weats_positions_list) < floor(tiges_maximum(ecartement) * .8):
         pos_x = randint(x, x + width)
         pos_y = randint(y, y + height)
 
-        # Permet de trouver si une tige de blé existe déjà à proximité de celle en train types'être créé.
         weat_close = False
         for generated_weat in weats_positions_list:
-            # Vérification de la distance du nouveau point avec ceux déjà existants
-            vectors_distance = sqrt((generated_weat[0] - pos_x) ** 2 + (generated_weat[1] - pos_y) ** 2)
+            vectors_distance = sqrt((generated_weat[0] - pos_x) ** 2 + (generated_weat[1] - pos_y) ** 2)  # Calcul de la distance entre les tiges de blé, par un vecteur
 
-            # Annulation de l'ajout si la distance est inférieure à ecartement pixels (de rayon)
             if vectors_distance <= ecartement:
                 weat_close = True
                 break
 
         if not weat_close:
-            # Ajout des nouvelles positions
             weats_positions_list.append((pos_x, pos_y))
 
-    weats_positions_list.sort(key=lambda position: position[1])
+    weats_positions_list.sort(key=lambda position: position[1])  # Tri des tiges de blé par ordre croissant de position y, pour les dessiner dans l'ordre
 
     for generated_weat in weats_positions_list:
-        # La hauteur des tiges de blé variera entre 80 et 120 pixels
         hauteur_ble = ((generated_weat[1] - y) * 40) / height + 80
 
-        weat(x = generated_weat[0], y = generated_weat[1], height = hauteur_ble, width = hauteur_ble * 8 / 100)
+        weat(x = generated_weat[0], y = generated_weat[1], height = hauteur_ble, width = hauteur_ble * 8 / 100, stem_color=stem_color, cobs_color=cobs_color, weat_size=weat_size) # Dessin de la tige de blé
 
 
 def weat(*, x: int, y: int, weat_size: float = 1, width: int, height: int, stem_color: color_type = (200, 150, 50), cobs_color: color_type = (255, 205, 105)):
+    """
+    Dessine un épi de blé avec sa tige
+
+    :param x: int - La position x de l'épi de blé
+    :param y: int - La position y de l'épi de blé
+    :param weat_size: float - L'échelle de taille du blé
+    :param width: int - La largeur de la tige de blé
+    :param height: int - La hauteur de la tige de blé
+    :param stem_color: color_type - La couleur de la tige de blé
+    :param cobs_color: color_type - La couleur de l'épi de blé
+
+    :return: None
+    """
+
+    # Assertions
+    assert isinstance(y, int), "y doit être un entier"
+    assert isinstance(x, int), "x doit être un entier"
+    assert assert_size_factor(weat_size), "test_size doit être un réel supérieur à 0"
+    assert isinstance(width, int), "width doit être un entier"
+    assert isinstance(height, int), "height doit être un entier"
+    assert assert_color(stem_color), "stem_color doit être un tuple de 3 entiers."
+    assert assert_color(cobs_color), "cobs_color doit être un tuple de 3 entiers."
+
+    # Dessin de l'épi de blé
     scale(weat_size)
 
     stroke(*stem_color)
