@@ -15,7 +15,7 @@ def setup():
 
 # Types
 color_type = Tuple[int, int, int]
-positions_list = List[Tuple[int, int], ...]
+positions_list = List[Tuple[int, int]]
 
 # Constantes
 wheat_stem_default_color: color_type = (200, 150, 50)
@@ -296,7 +296,7 @@ def tree(*, x: int, y: int, tree_size: float = 1, trunc_color: color_type = (131
     # Feuilles
     cloud(x=int(x + 40 * tree_size), y=int(y - 300 * tree_size), scalar=100, cloud_color=leaf_color, cloud_size=tree_size / 2, repeat_distance=tree_size / 2, color_variation=leaf_color_variation, cloud_color_variation_mode="maximum")
 
-def wheat_field(*, x: int, y: int, wheat_size: float = 1, width: int, height: int, stem_color: color_type = wheat_stem_default_color, cobs_color: color_type = wheat_cobs_default_color, field_bg_color: color_type = (255, 176, 7), wheat_positions_list: positions_list = []):
+def wheat_field(*, x: int, y: int, wheat_size: float = 1, width: int, height: int, stem_color: color_type = wheat_stem_default_color, cobs_color: color_type = wheat_cobs_default_color, field_bg_color: color_type = (255, 176, 7), wheat_positions_list: positions_list = [], maximum_wheat: int = None):
     """
     Crée un champ de blé à partir de la fonction wheat.
 
@@ -309,6 +309,7 @@ def wheat_field(*, x: int, y: int, wheat_size: float = 1, width: int, height: in
     :param cobs_color: color_type - La couleur des épis de blé. Par défaut : (255, 205, 105)
     :param field_bg_color: color_type - La couleur de fond du champ de blé. Par défaut : (255, 176, 7)
     :param wheat_positions_list: List[Tuple[int, int], ...] - La liste des positions des tiges de blé. Par défaut : []. Ne pas modifier, le système s'occupe de le remplir
+    :param maximum_wheat: int | None - Le nombre maximum de tiges de blé. Par défaut : None, et calculé automatiquement
 
     :type wheat_positions_list: list
 
@@ -325,6 +326,7 @@ def wheat_field(*, x: int, y: int, wheat_size: float = 1, width: int, height: in
     assert assert_color(cobs_color), "cobs_color doit être un tuple de 3 entiers."
     assert assert_color(field_bg_color), "field_bg_color doit être un tuple de 3 entiers."
     assert isinstance(wheat_positions_list, list), "wheats_positions_list doit être une liste"
+    assert maximum_wheat is None or assert_size_factor(maximum_wheat), "maximum_wheat doit être un entier ou None"
 
     # Dessin du champ de blé
     noStroke()
@@ -337,8 +339,11 @@ def wheat_field(*, x: int, y: int, wheat_size: float = 1, width: int, height: in
 
     ecartement = .1 * max(width, height) # Calcul de l'écartement entre les tiges de blé
 
+    target_number = maximum_wheat if maximum_wheat is not None else floor(tiges_maximum(ecartement) * .8) # Calcul du nombre de tiges de blé
+
+    counter = 0
     # Création des tiges de blé
-    while len(wheat_positions_list) < floor(tiges_maximum(ecartement) * .8):
+    while len(wheat_positions_list) < target_number and counter < 1000:
         pos_x = randint(x, x + width)
         pos_y = randint(y, y + height)
 
@@ -353,12 +358,14 @@ def wheat_field(*, x: int, y: int, wheat_size: float = 1, width: int, height: in
         if not wheat_close:
             wheat_positions_list.append((pos_x, pos_y))
 
+        counter += 1
+
     wheat_positions_list.sort(key=lambda position: position[1])  # Tri des tiges de blé par ordre croissant de position y, pour les dessiner dans l'ordre
 
     for generated_wheat in wheat_positions_list:
         hauteur_ble = ((generated_wheat[1] - y) * 40) / height + 80
 
-        wheat(x = generated_wheat[0], y = generated_wheat[1], height = hauteur_ble, width = hauteur_ble * 8 / 100, stem_color=stem_color, cobs_color=cobs_color, wheat_size=wheat_size) # Dessin de la tige de blé
+        wheat(x = generated_wheat[0], y = generated_wheat[1], height = int(hauteur_ble), width = int(hauteur_ble * 8 / 100), stem_color=stem_color, cobs_color=cobs_color, wheat_size=wheat_size) # Dessin de la tige de blé
 
 
 def wheat(*, x: int, y: int, wheat_size: float = 1, width: int, height: int, stem_color: color_type = (200, 150, 50), cobs_color: color_type = (255, 205, 105)):
@@ -386,18 +393,20 @@ def wheat(*, x: int, y: int, wheat_size: float = 1, width: int, height: int, ste
     assert assert_color(cobs_color), "cobs_color doit être un tuple de 3 entiers."
 
     # Dessin de l'épi de blé
+    translate(x, y)
     scale(wheat_size)
 
     stroke(*stem_color)
     strokeWeight(width)
-    line(x, y, x, y - height)
+    line(0, 0, 0, -height)
 
     noStroke()
     fill(*cobs_color)
     for i in range(5):
-        ellipse(x, y - height - (i * 15), width * 2, width * 4)
+        ellipse(0, -height - (i * 15), width * 2, width * 4)
 
     scale(1 / wheat_size)
+    translate(-x, -y)
 
 def draw_fleur(posx,posy, rayon, nb_petale,centre,petales):
     """
@@ -523,7 +532,7 @@ def draw():
     # cloud(x = WIDTH // 2, y = HEIGHT // 2, scalar=95, cloud_size=.5, repeat_distance=.31, color_variation=5, cloud_color=(150, 150, 150))
     # tree(x=WIDTH // 2, y=HEIGHT, cloud_size=1.5)
 
-    wheat_field(x = 200, y = 200, width = 100, height = 100)
+    wheat_field(x = 200, y = 200, width = 400, height = 300, wheat_size = .8)
 
     # Ferme(200, 150, 200, 150,'red','brown','brown',270, 230, 60, 70,'white',220, 180, 40, 40)
 
