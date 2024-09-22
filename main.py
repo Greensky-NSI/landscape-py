@@ -18,8 +18,8 @@ color_type = Tuple[int, int, int]
 positions_list = List[Tuple[int, int], ...]
 
 # Constantes
-weat_stem_default_color: color_type = (200, 150, 50)
-weat_cobs_default_color: color_type = (255, 205, 105)
+wheat_stem_default_color: color_type = (200, 150, 50)
+wheat_cobs_default_color: color_type = (255, 205, 105)
 
 # Variables globales
 fond: int = 255
@@ -157,7 +157,7 @@ def river(*, top_left: int = 0, top_right: int = 0, bottom_left: int = HEIGHT, b
 
 def cloud(*, x: int = 0, y: int = 0, scalar: int = 100, cloud_color: color_type = (255, 255, 255), cloud_size: float = 1, repeat_distance = .4, repeated: bool = False, color_variation: float = 0, pi_count: int = 0, cloud_color_variation_mode: Literal["modulo", "maximum"] = "modulo"):
     """
-    Dessine un nuage à l'écran à la position donnée avec la taille et la couleur données
+    Dessine un nuage à l'écran à la position donnée avec la taille et la couleur données.
 
     :param x: int - La position x du nuage
     :param y: int - La position y du nuage
@@ -165,7 +165,7 @@ def cloud(*, x: int = 0, y: int = 0, scalar: int = 100, cloud_color: color_type 
     :param cloud_color: color_type - La couleur du nuage. Par défaut : (255, 255, 255)
     :param cloud_size: float | int - C'est l'échelle utilisée lors du dessin du nuage. Par défaut : 1
     :param repeat_distance: float | int - La distance entre les nuages. Par défaut/Recommandée : 2/3
-    :param color_variation: float - Facteur de variation de couleur. Par défaut: 0
+    :param color_variation: float - Facteur de variation de couleur. Par défaut : 0
     :param repeated: bool - Paramètre de machine pour s'appeler à la fin du nuage. Par défaut : False, ne pas modifier
     :param pi_count: int - Paramètre de machine pour garder une alternance. Par défaut : 0, ne pas modifier
     :param cloud_color_variation_mode: "modulo" | "maximum" - Mode de variation de couleur. Par défaut : "modulo"
@@ -296,19 +296,21 @@ def tree(*, x: int, y: int, tree_size: float = 1, trunc_color: color_type = (131
     # Feuilles
     cloud(x=int(x + 40 * tree_size), y=int(y - 300 * tree_size), scalar=100, cloud_color=leaf_color, cloud_size=tree_size / 2, repeat_distance=tree_size / 2, color_variation=leaf_color_variation, cloud_color_variation_mode="maximum")
 
-def weat_field(*, x: int, y: int, weat_size: float = 1, width: int, height: int, stem_color: color_type = weat_stem_default_color, cobs_color: color_type = weat_cobs_default_color, field_bg_color: color_type = (255, 176, 7), weats_positions_list: positions_list = []):
+def wheat_field(*, x: int, y: int, wheat_size: float = 1, width: int, height: int, stem_color: color_type = wheat_stem_default_color, cobs_color: color_type = wheat_cobs_default_color, field_bg_color: color_type = (255, 176, 7), wheat_positions_list: positions_list = []):
     """
-    Crée un champ de blé à partir de la fonction weat
+    Crée un champ de blé à partir de la fonction wheat.
 
     :param x: int - La position x du champ de blé
     :param y: int - La position y du champ de blé
-    :param weat_size: float - L'échelle de taille des tiges de blé. Par défaut : 1
+    :param wheat_size: float - L'échelle de taille des tiges de blé. Par défaut : 1
     :param width: int - La largeur du champ de blé
     :param height: int - La hauteur du champ de blé
     :param stem_color: color_type - La couleur des tiges de blé. Par défaut : (200, 150, 50)
     :param cobs_color: color_type - La couleur des épis de blé. Par défaut : (255, 205, 105)
     :param field_bg_color: color_type - La couleur de fond du champ de blé. Par défaut : (255, 176, 7)
-    :param weats_positions_list: List[Tuple[int, int], ...] - La liste des positions des tiges de blé. Par défaut : []. Ne pas modifier, le système s'occupe de le remplir
+    :param wheat_positions_list: List[Tuple[int, int], ...] - La liste des positions des tiges de blé. Par défaut : []. Ne pas modifier, le système s'occupe de le remplir
+
+    :type wheat_positions_list: list
 
     :return: None
     """
@@ -316,13 +318,13 @@ def weat_field(*, x: int, y: int, weat_size: float = 1, width: int, height: int,
     # Assertions
     assert isinstance(x, int), "x doit être un entier"
     assert isinstance(y, int), "y doit être un entier"
-    assert assert_size_factor(weat_size), "test_size doit être un réel/entier et supérieur à 0"
+    assert assert_size_factor(wheat_size), "test_size doit être un réel/entier et supérieur à 0"
     assert isinstance(width, int), "width doit être un entier"
     assert isinstance(height, int), "height doit être un entier"
     assert assert_color(stem_color), "stem_color doit être un tuple de 3 entiers."
     assert assert_color(cobs_color), "cobs_color doit être un tuple de 3 entiers."
     assert assert_color(field_bg_color), "field_bg_color doit être un tuple de 3 entiers."
-    assert isinstance(weats_positions_list, list), "weats_positions_list doit être une liste"
+    assert isinstance(wheat_positions_list, list), "wheats_positions_list doit être une liste"
 
     # Dessin du champ de blé
     noStroke()
@@ -336,36 +338,36 @@ def weat_field(*, x: int, y: int, weat_size: float = 1, width: int, height: int,
     ecartement = .1 * max(width, height) # Calcul de l'écartement entre les tiges de blé
 
     # Création des tiges de blé
-    while len(weats_positions_list) < floor(tiges_maximum(ecartement) * .8):
+    while len(wheat_positions_list) < floor(tiges_maximum(ecartement) * .8):
         pos_x = randint(x, x + width)
         pos_y = randint(y, y + height)
 
-        weat_close = False
-        for generated_weat in weats_positions_list:
-            vectors_distance = sqrt((generated_weat[0] - pos_x) ** 2 + (generated_weat[1] - pos_y) ** 2)  # Calcul de la distance entre les tiges de blé, par un vecteur
+        wheat_close = False
+        for generated_wheat in wheat_positions_list:
+            vectors_distance = sqrt((generated_wheat[0] - pos_x) ** 2 + (generated_wheat[1] - pos_y) ** 2)  # Calcul de la distance entre les tiges de blé, par un vecteur
 
             if vectors_distance <= ecartement:
-                weat_close = True
+                wheat_close = True
                 break
 
-        if not weat_close:
-            weats_positions_list.append((pos_x, pos_y))
+        if not wheat_close:
+            wheat_positions_list.append((pos_x, pos_y))
 
-    weats_positions_list.sort(key=lambda position: position[1])  # Tri des tiges de blé par ordre croissant de position y, pour les dessiner dans l'ordre
+    wheat_positions_list.sort(key=lambda position: position[1])  # Tri des tiges de blé par ordre croissant de position y, pour les dessiner dans l'ordre
 
-    for generated_weat in weats_positions_list:
-        hauteur_ble = ((generated_weat[1] - y) * 40) / height + 80
+    for generated_wheat in wheat_positions_list:
+        hauteur_ble = ((generated_wheat[1] - y) * 40) / height + 80
 
-        weat(x = generated_weat[0], y = generated_weat[1], height = hauteur_ble, width = hauteur_ble * 8 / 100, stem_color=stem_color, cobs_color=cobs_color, weat_size=weat_size) # Dessin de la tige de blé
+        wheat(x = generated_wheat[0], y = generated_wheat[1], height = hauteur_ble, width = hauteur_ble * 8 / 100, stem_color=stem_color, cobs_color=cobs_color, wheat_size=wheat_size) # Dessin de la tige de blé
 
 
-def weat(*, x: int, y: int, weat_size: float = 1, width: int, height: int, stem_color: color_type = (200, 150, 50), cobs_color: color_type = (255, 205, 105)):
+def wheat(*, x: int, y: int, wheat_size: float = 1, width: int, height: int, stem_color: color_type = (200, 150, 50), cobs_color: color_type = (255, 205, 105)):
     """
     Dessine un épi de blé avec sa tige
 
     :param x: int - La position x de l'épi de blé
     :param y: int - La position y de l'épi de blé
-    :param weat_size: float - L'échelle de taille du blé
+    :param wheat_size: float - L'échelle de taille du blé
     :param width: int - La largeur de la tige de blé
     :param height: int - La hauteur de la tige de blé
     :param stem_color: color_type - La couleur de la tige de blé
@@ -377,14 +379,14 @@ def weat(*, x: int, y: int, weat_size: float = 1, width: int, height: int, stem_
     # Assertions
     assert isinstance(y, int), "y doit être un entier"
     assert isinstance(x, int), "x doit être un entier"
-    assert assert_size_factor(weat_size), "test_size doit être un réel supérieur à 0"
+    assert assert_size_factor(wheat_size), "test_size doit être un réel supérieur à 0"
     assert isinstance(width, int), "width doit être un entier"
     assert isinstance(height, int), "height doit être un entier"
     assert assert_color(stem_color), "stem_color doit être un tuple de 3 entiers."
     assert assert_color(cobs_color), "cobs_color doit être un tuple de 3 entiers."
 
     # Dessin de l'épi de blé
-    scale(weat_size)
+    scale(wheat_size)
 
     stroke(*stem_color)
     strokeWeight(width)
@@ -395,7 +397,7 @@ def weat(*, x: int, y: int, weat_size: float = 1, width: int, height: int, stem_
     for i in range(5):
         ellipse(x, y - height - (i * 15), width * 2, width * 4)
 
-    scale(1 / weat_size)
+    scale(1 / wheat_size)
 
 def draw_fleur(posx,posy, rayon, nb_petale,centre,petales):
     """
@@ -521,7 +523,7 @@ def draw():
     # cloud(x = WIDTH // 2, y = HEIGHT // 2, scalar=95, cloud_size=.5, repeat_distance=.31, color_variation=5, cloud_color=(150, 150, 150))
     # tree(x=WIDTH // 2, y=HEIGHT, cloud_size=1.5)
 
-    weat_field(x = 200, y = 200, width = 100, height = 100)
+    wheat_field(x = 200, y = 200, width = 100, height = 100)
 
     # Ferme(200, 150, 200, 150,'red','brown','brown',270, 230, 60, 70,'white',220, 180, 40, 40)
 
