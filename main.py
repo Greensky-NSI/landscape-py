@@ -21,11 +21,6 @@ positions_list = List[Tuple[int, int]]
 wheat_stem_default_color: color_type = (200, 150, 50)
 wheat_cobs_default_color: color_type = (255, 205, 105)
 
-# Variables globales
-fond: int = 255
-nb_etoiles: int = 0
-liste_etoiles: List[int] = []
-
 # Assert functions
 def assert_color(col: color_type):
     return isinstance(col, tuple) and len(col) == 3 and all(isinstance(i, int) for i in col)
@@ -35,6 +30,32 @@ def assert_color_mode(mode: str):
 
 def assert_size_factor(test_size):
     return (isinstance(test_size, float) or isinstance(test_size, int)) and test_size > 0
+
+# Classes utiles
+class Timer:
+    currentTick: int = 0
+    maxTick: int = 0
+
+    def __init__(self, maxTick: int):
+        self.maxTick = maxTick
+
+    def tick(self):
+        self.currentTick = self.currentTick + 1 % self.maxTick
+        return self
+
+    def reset(self):
+        self.currentTick = 0
+        return self
+
+    @property
+    def ok(self):
+        return self.currentTick == self.maxTick
+
+
+# Variables globales
+fond: int = 255
+nb_etoiles: int = 0
+liste_etoiles: List[int] = []
 
 # Utils
 def frame_number(number: int | float, *, maximum: int | float = 100, minimum: int | float = 0):
