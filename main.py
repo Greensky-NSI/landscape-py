@@ -1,7 +1,7 @@
 from random import randint
 
 from p5 import *
-from typing import Tuple, List, Literal
+from typing import Tuple, List, Literal, Union
 
 from custom_types import *    # IMPORTANT importations utiles uniquement pour ceux qui utilisent PyCharm, avec le fichier en plus "custom_types.py" codé par David, car PyCharm ne recoonnait pas certaines variables de p5
 
@@ -14,7 +14,7 @@ def setup():
     background(0)
 
 # Types
-color_type = Tuple[int, int, int]
+color_type = Union[Tuple[int, int, int], Tuple[int, int, int, int]]
 positions_list = List[Tuple[int, int]]
 
 # Constantes
@@ -23,7 +23,7 @@ wheat_cobs_default_color: color_type = (255, 205, 105)
 
 # Assert functions
 def assert_color(col: color_type):
-    return isinstance(col, tuple) and len(col) == 3 and all(isinstance(i, int) for i in col)
+    return isinstance(col, tuple) and (len(col) == 3 or len(col) == 4) and all(isinstance(i, int) for i in col)
 
 def assert_color_mode(mode: str):
     return mode in ["maximum", "modulo"]
@@ -72,12 +72,23 @@ def parse_color(col: color_type, *, mode: Literal["maximum", "modulo"] = "maximu
     assert assert_color(col), "col doit être un tuple de 3 entiers."
 
     # Analyse
-    if mode == "modulo":
-        return max(0, col[0]) % 255, max(0, col[1]) % 255, max(0, col[2] % 255)
-    elif mode == "maximum":
-        return frame_number(col[0], maximum=255), frame_number(col[1], maximum=255), frame_number(col[2], maximum=255)
+    def colors() -> Tuple[int, int, int]:
+        if mode == "modulo":
+            return max(0, col[0]) % 255, max(0, col[1]) % 255, max(0, col[2] % 255)
+        elif mode == "maximum":
+            return frame_number(col[0], maximum=255), frame_number(col[1], maximum=255), frame_number(col[2], maximum=255)
+        else:
+            raise ValueError(f"Invalid mode: {mode}")
+
+    if len(col) == 3:
+        return colors()
     else:
-        raise ValueError(f"Invalid mode: {mode}")
+        cols = colors()
+        if mode == "modulo":
+            return cols[0], cols[1], cols[2], frame_number(col[3], maximum=255)
+        else:
+            return cols[0], cols[1], cols[2], frame_number(col[3], maximum=255, minimum=0)
+
 
 def increase_color(col: color_type, increaser: int | float, *, mode: Literal["maximum", "modulo"] = "maximum") -> color_type:
     """
