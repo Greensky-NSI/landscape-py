@@ -548,6 +548,21 @@ def vache(taille, pos_x, pos_y, couleur_corps=(255, 255, 255), couleur_tete=(255
 
     :return: None
     """
+
+    # Assertions
+    assert isinstance(taille, int) or isinstance(taille, float), "taille doit être un entier ou un réel"
+    assert isinstance(pos_x, int), "pos_x doit être un entier"
+    assert isinstance(pos_y, int), "pos_y doit être un entier"
+    assert assert_color(couleur_corps), "couleur_corps doit être un tuple de 3 entiers."
+    assert assert_color(couleur_tete), "couleur_tete doit être un tuple de 3 entiers."
+    assert assert_color(couleur_yeux), "couleur_yeux doit être un tuple de 3 entiers."
+    assert assert_color(couleur_museau), "couleur_museau doit être un tuple de 3 entiers."
+    assert assert_color(couleur_nez), "couleur_nez doit être un tuple de 3 entiers."
+    assert assert_color(couleur_cornes), "couleur_cornes doit être un tuple de 3 entiers."
+    assert assert_color(couleur_pattes), "couleur_pattes doit être un tuple de 3 entiers."
+    assert assert_color(couleur_taches), "couleur_taches doit être un tuple de 3 entiers."
+
+    # Dessin de la vache
     translate(pos_x, pos_y)
     scale(taille)
 
@@ -599,6 +614,17 @@ def papillon(taille, pos_x, pos_y, couleur_ailes=(255, 255, 255), couleur_corps=
 
     :return: None
     """
+
+    # Assertions
+    assert isinstance(taille, int) or isinstance(taille, float), "taille doit être un entier ou un réel"
+    assert isinstance(pos_x, int), "pos_x doit être un entier"
+    assert isinstance(pos_y, int), "pos_y doit être un entier"
+    assert assert_color(couleur_ailes), "couleur_ailes doit être un tuple de 3 entiers."
+    assert assert_color(couleur_corps), "couleur_corps doit être un tuple de 3 entiers."
+    assert assert_color(couleur_antennes), "couleur_antennes doit être un tuple de 3 entiers."
+    assert isinstance(epaisseur_bordure, int) and epaisseur_bordure >= 0, "epaisseur_bordure doit être un entier naturel"
+
+    # Dessin du papillon
     translate(pos_x, pos_y)
     scale(taille)
 
