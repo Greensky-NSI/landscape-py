@@ -531,6 +531,23 @@ def etoiles(cielH, liste_etoiles_):
 def vache(taille, pos_x, pos_y, couleur_corps=(255, 255, 255), couleur_tete=(255, 255, 255), couleur_yeux=(0, 0, 0),
           couleur_museau=(255, 192, 203), couleur_nez=(0, 0, 0), couleur_cornes=(160, 160, 1600), couleur_pattes=(255, 255, 255),
           couleur_taches=(0, 0, 0)):
+    """
+    Dessine une vache à l'écran avec les paramètres donnés
+
+    :param taille: int - L'échelle de la vache
+    :param pos_x: int - La position x de la vache
+    :param pos_y: int - La position y de la vache
+    :param couleur_corps: color_type - La couleur du corps de la vache
+    :param couleur_tete: color_type - La couleur de la tête de la vache
+    :param couleur_yeux: color_type - La couleur des yeux de la vache
+    :param couleur_museau: color_type - La couleur du museau de la vache
+    :param couleur_nez: color_type - La couleur du nez de la vache
+    :param couleur_cornes: color_type - La couleur des cornes de la vache
+    :param couleur_pattes: color_type - La couleur des pattes de la vache
+    :param couleur_taches: color_type - La couleur des taches de la vache
+
+    :return: None
+    """
     translate(pos_x, pos_y)
     scale(taille)
 
@@ -569,6 +586,19 @@ def vache(taille, pos_x, pos_y, couleur_corps=(255, 255, 255), couleur_tete=(255
 
 def papillon(taille, pos_x, pos_y, couleur_ailes=(255, 255, 255), couleur_corps=(255, 255, 255), couleur_antennes=(0, 0, 0),
              epaisseur_bordure=3):
+    """
+    Dessine un papillon à l'écran avec les paramètres donnés
+
+    :param taille: int - L'échelle du papillon
+    :param pos_x: int - La position x du papillon
+    :param pos_y: int - La position y du papillon
+    :param couleur_ailes: color_type - La couleur des ailes du papillon
+    :param couleur_corps: color_type - La couleur du corps du papillon
+    :param couleur_antennes: color_type - La couleur des antennes du papillon
+    :param epaisseur_bordure: int - L'épaisseur de la bordure du papillon
+
+    :return: None
+    """
     translate(pos_x, pos_y)
     scale(taille)
 
