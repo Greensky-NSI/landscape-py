@@ -573,19 +573,19 @@ def papillon(taille, pos_x, pos_y, couleur_ailes=(255, 255, 255), couleur_corps=
     scale(taille)
 
     safe_fill(couleur_ailes)
-    triangle(110,235,200,180,200,270) # aile gauche
-    triangle(90,150,180,150,180,250)
+    triangle(110, 235, 200, 180, 200, 270) # aile gauche
+    triangle(90, 150, 180, 150, 180, 250)
 
-    triangle(290,235,200,180,200,270) #aile droite
-    triangle(310,150,210,150,210,260)
+    triangle(290, 235, 200, 180, 200, 270) #aile droite
+    triangle(310, 150, 210, 150, 210, 260)
 
     safe_fill(couleur_corps)  #corps
-    ellipse(200,200,50,150)
+    ellipse(200, 200, 50, 150)
 
     safe_fill(couleur_antennes)  #antennes
     strokeWeight(epaisseur_bordure)
-    line(160,90,190,130)
-    line(240,90,210,130)
+    line(160, 90, 190, 130)
+    line(240, 90, 210, 130)
 
     scale(1/taille)
     translate(-pos_x, -pos_y)
