@@ -1,7 +1,7 @@
 from random import randint
 
 from p5 import *
-from typing import Tuple, List, Literal
+from typing import Tuple, List, Literal, Union
 
 from custom_types import *    # IMPORTANT importations utiles uniquement pour ceux qui utilisent PyCharm, avec le fichier en plus "custom_types.py" codé par David, car PyCharm ne recoonnait pas certaines variables de p5
 
@@ -14,7 +14,7 @@ def setup():
     background(0)
 
 # Types
-color_type = Tuple[int, int, int]
+color_type = Union[Tuple[int, int, int], Tuple[int, int, int, int]]
 positions_list = List[Tuple[int, int]]
 
 # Constantes
@@ -23,7 +23,7 @@ wheat_cobs_default_color: color_type = (255, 205, 105)
 
 # Assert functions
 def assert_color(col: color_type):
-    return isinstance(col, tuple) and len(col) == 3 and all(isinstance(i, int) for i in col)
+    return isinstance(col, tuple) and (len(col) == 3 or len(col) == 4) and all(isinstance(i, int) for i in col)
 
 def assert_color_mode(mode: str):
     return mode in ["maximum", "modulo"]
@@ -69,15 +69,26 @@ def parse_color(col: color_type, *, mode: Literal["maximum", "modulo"] = "maximu
 
     # Assertions
     assert mode in ["maximum", "modulo"], "Le mode doit être soit : \"maximum\", \"modulo\""
-    assert assert_color(col), "col doit être un tuple de 3 entiers."
+    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
 
     # Analyse
-    if mode == "modulo":
-        return max(0, col[0]) % 255, max(0, col[1]) % 255, max(0, col[2] % 255)
-    elif mode == "maximum":
-        return frame_number(col[0], maximum=255), frame_number(col[1], maximum=255), frame_number(col[2], maximum=255)
+    def colors() -> Tuple[int, int, int]:
+        if mode == "modulo":
+            return max(0, col[0]) % 255, max(0, col[1]) % 255, max(0, col[2] % 255)
+        elif mode == "maximum":
+            return frame_number(col[0], maximum=255), frame_number(col[1], maximum=255), frame_number(col[2], maximum=255)
+        else:
+            raise ValueError(f"Invalid mode: {mode}")
+
+    if len(col) == 3:
+        return colors()
     else:
-        raise ValueError(f"Invalid mode: {mode}")
+        cols = colors()
+        if mode == "modulo":
+            return cols[0], cols[1], cols[2], frame_number(col[3], maximum=255)
+        else:
+            return cols[0], cols[1], cols[2], frame_number(col[3], maximum=255, minimum=0)
+
 
 def increase_color(col: color_type, increaser: int | float, *, mode: Literal["maximum", "modulo"] = "maximum") -> color_type:
     """
@@ -91,7 +102,7 @@ def increase_color(col: color_type, increaser: int | float, *, mode: Literal["ma
     """
 
     # Assertions
-    assert assert_color(col), "col doit être un tuple de 3 entiers."
+    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
     assert isinstance(increaser, int) or isinstance(increaser, float), "increaser doit être un entier ou un réel"
     assert assert_color_mode(mode), "Le mode doit être soit : \"maximum\", \"modulo\""
 
@@ -106,7 +117,7 @@ def safe_fill(col: color_type):
     :return: None
     """
     # Assertions
-    assert assert_color(col), "col doit être un tuple de 3 entiers."
+    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
 
     fill(*parse_color(col))
 
@@ -517,6 +528,124 @@ def etoiles(cielH, liste_etoiles_):
         fill(255)
         ellipse(x,y,5,5)
 
+def vache(taille, pos_x, pos_y, couleur_corps=(255, 255, 255), couleur_tete=(255, 255, 255), couleur_yeux=(0, 0, 0),
+          couleur_museau=(255, 192, 203), couleur_nez=(0, 0, 0), couleur_cornes=(160, 160, 1600), couleur_pattes=(255, 255, 255),
+          couleur_taches=(0, 0, 0)):
+    """
+    Dessine une vache à l'écran avec les paramètres donnés
+
+    :param taille: int - L'échelle de la vache
+    :param pos_x: int - La position x de la vache
+    :param pos_y: int - La position y de la vache
+    :param couleur_corps: color_type - La couleur du corps de la vache
+    :param couleur_tete: color_type - La couleur de la tête de la vache
+    :param couleur_yeux: color_type - La couleur des yeux de la vache
+    :param couleur_museau: color_type - La couleur du museau de la vache
+    :param couleur_nez: color_type - La couleur du nez de la vache
+    :param couleur_cornes: color_type - La couleur des cornes de la vache
+    :param couleur_pattes: color_type - La couleur des pattes de la vache
+    :param couleur_taches: color_type - La couleur des taches de la vache
+
+    :return: None
+    """
+
+    # Assertions
+    assert isinstance(taille, int) or isinstance(taille, float), "taille doit être un entier ou un réel"
+    assert isinstance(pos_x, int), "pos_x doit être un entier"
+    assert isinstance(pos_y, int), "pos_y doit être un entier"
+    assert assert_color(couleur_corps), "couleur_corps doit être un tuple de 3 entiers."
+    assert assert_color(couleur_tete), "couleur_tete doit être un tuple de 3 entiers."
+    assert assert_color(couleur_yeux), "couleur_yeux doit être un tuple de 3 entiers."
+    assert assert_color(couleur_museau), "couleur_museau doit être un tuple de 3 entiers."
+    assert assert_color(couleur_nez), "couleur_nez doit être un tuple de 3 entiers."
+    assert assert_color(couleur_cornes), "couleur_cornes doit être un tuple de 3 entiers."
+    assert assert_color(couleur_pattes), "couleur_pattes doit être un tuple de 3 entiers."
+    assert assert_color(couleur_taches), "couleur_taches doit être un tuple de 3 entiers."
+
+    # Dessin de la vache
+    translate(pos_x, pos_y)
+    scale(taille)
+
+    safe_fill(couleur_corps)    #corps
+    rect(150, 200, 150, 100)
+
+    safe_fill(couleur_tete)     #tête
+    ellipse(270, 170, 60, 60)
+
+    safe_fill(couleur_yeux)  #yeux
+    ellipse(285, 150, 10, 10)
+
+    safe_fill(couleur_museau)     #museau
+    ellipse(295, 175, 40, 20)
+
+    safe_fill(couleur_nez)                              #nez
+    ellipse(299, 179, 10, 10)
+
+    safe_fill(couleur_cornes)        #cornes
+    triangle(260, 140, 280, 140, 260, 120)
+    triangle(245, 150, 245, 125, 265, 138)
+
+    safe_fill(couleur_pattes)     # pattes
+    rect(165, 300, 20, 50)
+    rect(265, 300, 20, 50)
+
+    safe_fill(couleur_taches)                 #Taches sur le corps
+    ellipse(180, 230, 30, 30)
+    ellipse(220, 240, 30, 30)
+    ellipse(200, 270, 30, 30)
+    ellipse(260, 270, 30, 30)
+    ellipse(280, 230, 30, 30)
+
+    scale(1/taille)
+    translate(-pos_x, -pos_y)
+
+def papillon(taille, pos_x, pos_y, couleur_ailes=(255, 255, 255), couleur_corps=(255, 255, 255), couleur_antennes=(0, 0, 0),
+             epaisseur_bordure=3):
+    """
+    Dessine un papillon à l'écran avec les paramètres donnés
+
+    :param taille: int - L'échelle du papillon
+    :param pos_x: int - La position x du papillon
+    :param pos_y: int - La position y du papillon
+    :param couleur_ailes: color_type - La couleur des ailes du papillon
+    :param couleur_corps: color_type - La couleur du corps du papillon
+    :param couleur_antennes: color_type - La couleur des antennes du papillon
+    :param epaisseur_bordure: int - L'épaisseur de la bordure du papillon
+
+    :return: None
+    """
+
+    # Assertions
+    assert isinstance(taille, int) or isinstance(taille, float), "taille doit être un entier ou un réel"
+    assert isinstance(pos_x, int), "pos_x doit être un entier"
+    assert isinstance(pos_y, int), "pos_y doit être un entier"
+    assert assert_color(couleur_ailes), "couleur_ailes doit être un tuple de 3 entiers."
+    assert assert_color(couleur_corps), "couleur_corps doit être un tuple de 3 entiers."
+    assert assert_color(couleur_antennes), "couleur_antennes doit être un tuple de 3 entiers."
+    assert isinstance(epaisseur_bordure, int) and epaisseur_bordure >= 0, "epaisseur_bordure doit être un entier naturel"
+
+    # Dessin du papillon
+    translate(pos_x, pos_y)
+    scale(taille)
+
+    safe_fill(couleur_ailes)
+    triangle(110, 235, 200, 180, 200, 270) # aile gauche
+    triangle(90, 150, 180, 150, 180, 250)
+
+    triangle(290, 235, 200, 180, 200, 270) #aile droite
+    triangle(310, 150, 210, 150, 210, 260)
+
+    safe_fill(couleur_corps)  #corps
+    ellipse(200, 200, 50, 150)
+
+    safe_fill(couleur_antennes)  #antennes
+    strokeWeight(epaisseur_bordure)
+    line(160, 90, 190, 130)
+    line(240, 90, 210, 130)
+
+    scale(1/taille)
+    translate(-pos_x, -pos_y)
+
 # Draw
 def draw():
     global fond, liste_etoiles
@@ -532,9 +661,11 @@ def draw():
     # cloud(x = WIDTH // 2, y = HEIGHT // 2, scalar=95, cloud_size=.5, repeat_distance=.31, color_variation=5, cloud_color=(150, 150, 150))
     # tree(x=WIDTH // 2, y=HEIGHT, cloud_size=1.5)
 
-    wheat_field(x = 200, y = 200, width = 400, height = 300, wheat_size = .8)
+    # wheat_field(x = 200, y = 200, width = 400, height = 300, wheat_size = .8)
 
     # Ferme(200, 150, 200, 150,'red','brown','brown',270, 230, 60, 70,'white',220, 180, 40, 40)
 
+    # vache(1, 100, 100)
+    papillon(1, 100, 100)
 
 run()
