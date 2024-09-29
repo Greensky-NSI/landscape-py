@@ -69,7 +69,7 @@ def parse_color(col: color_type, *, mode: Literal["maximum", "modulo"] = "maximu
 
     # Assertions
     assert mode in ["maximum", "modulo"], "Le mode doit être soit : \"maximum\", \"modulo\""
-    assert assert_color(col), "col doit être un tuple de 3 entiers."
+    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
 
     # Analyse
     def colors() -> Tuple[int, int, int]:
@@ -102,7 +102,7 @@ def increase_color(col: color_type, increaser: int | float, *, mode: Literal["ma
     """
 
     # Assertions
-    assert assert_color(col), "col doit être un tuple de 3 entiers."
+    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
     assert isinstance(increaser, int) or isinstance(increaser, float), "increaser doit être un entier ou un réel"
     assert assert_color_mode(mode), "Le mode doit être soit : \"maximum\", \"modulo\""
 
@@ -117,7 +117,7 @@ def safe_fill(col: color_type):
     :return: None
     """
     # Assertions
-    assert assert_color(col), "col doit être un tuple de 3 entiers."
+    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
 
     fill(*parse_color(col))
 
@@ -528,34 +528,36 @@ def etoiles(cielH, liste_etoiles_):
         fill(255)
         ellipse(x,y,5,5)
 
-def vache(taille, pos_x, pos_y):
+def vache(taille, pos_x, pos_y, couleur_corps=(255, 255, 255), couleur_tete=(255, 255, 255), couleur_yeux=(0, 0, 0),
+          couleur_museau=(255, 192, 203), couleur_nez=(0, 0, 0), couleur_cornes=(160, 160, 1600), couleur_pattes=(255, 255, 255),
+          couleur_taches=(0, 0, 0)):
     translate(pos_x, pos_y)
     scale(taille)
 
-    safe_fill((255, 255, 255))    #corps
+    safe_fill(couleur_corps)    #corps
     rect(150, 200, 150, 100)
 
-    safe_fill((255, 255, 255))     #tête
+    safe_fill(couleur_tete)     #tête
     ellipse(270, 170, 60, 60)
 
-    safe_fill((0, 0, 0))  #yeux
+    safe_fill(couleur_yeux)  #yeux
     ellipse(285, 150, 10, 10)
 
-    safe_fill((255, 192, 203))     #museau
+    safe_fill(couleur_museau)     #museau
     ellipse(295, 175, 40, 20)
 
-    safe_fill((0, 0, 0))                              #nez
+    safe_fill(couleur_nez)                              #nez
     ellipse(299, 179, 10, 10)
 
-    safe_fill((160, 160, 1600))        #cornes
+    safe_fill(couleur_cornes)        #cornes
     triangle(260, 140, 280, 140, 260, 120)
     triangle(245, 150, 245, 125, 265, 138)
 
-    safe_fill((255, 255, 255))     # pattes
+    safe_fill(couleur_pattes)     # pattes
     rect(165, 300, 20, 50)
     rect(265, 300, 20, 50)
 
-    safe_fill((0, 0, 0))                 #Taches sur le corps
+    safe_fill(couleur_taches)                 #Taches sur le corps
     ellipse(180, 230, 30, 30)
     ellipse(220, 240, 30, 30)
     ellipse(200, 270, 30, 30)
@@ -565,22 +567,23 @@ def vache(taille, pos_x, pos_y):
     scale(1/taille)
     translate(-pos_x, -pos_y)
 
-def papillon(taille, pos_x, pos_y):
+def papillon(taille, pos_x, pos_y, couleur_ailes=(255, 255, 255), couleur_corps=(255, 255, 255), couleur_antennes=(0, 0, 0),
+             epaisseur_bordure=3):
     translate(pos_x, pos_y)
     scale(taille)
 
-    safe_fill((255, 255, 255))
+    safe_fill(couleur_ailes)
     triangle(110,235,200,180,200,270) # aile gauche
     triangle(90,150,180,150,180,250)
 
     triangle(290,235,200,180,200,270) #aile droite
     triangle(310,150,210,150,210,260)
 
-    safe_fill((255, 255, 255))  #corps
+    safe_fill(couleur_corps)  #corps
     ellipse(200,200,50,150)
 
-    safe_fill((0, 0, 0))  #antennes
-    strokeWeight(3)
+    safe_fill(couleur_antennes)  #antennes
+    strokeWeight(epaisseur_bordure)
     line(160,90,190,130)
     line(240,90,210,130)
 
