@@ -517,6 +517,64 @@ def etoiles(cielH, liste_etoiles_):
         fill(255)
         ellipse(x,y,5,5)
 
+def vache(taille,posX,posY) :
+    translate(posX,posY)
+    scale(taille)
+
+    fill(255, 255, 255)    #corps
+    rect(150, 200, 150, 100)
+
+    fill(255, 255, 255)     #tête
+    ellipse(270, 170, 60, 60)
+    fill(0)  #yeux
+    ellipse(285, 150, 10, 10)
+
+    fill(255, 192, 203)     #museau
+    ellipse(295, 175, 40, 20)
+
+    fill(0)                              #nez
+    ellipse(299, 179, 10, 10)
+
+    fill(160, 160, 1600)        #cornes
+    triangle(260, 140, 280, 140, 260, 120)
+    triangle(245, 150, 245, 125, 265, 138)
+
+    fill(255, 255, 255)     # pattes
+    rect(165, 300, 20, 50)
+    rect(265, 300, 20, 50)
+
+    fill(0)                 #Taches sur le corps
+    ellipse(180, 230, 30, 30)
+    ellipse(220, 240, 30, 30)
+    ellipse(200, 270, 30, 30)
+    ellipse(260, 270, 30, 30)
+    ellipse(280, 230, 30, 30)
+
+    scale(1/taille)
+    translate(-posX,-posY)
+
+def papillon(taille,posX,posY):
+    translate(posX,posY)
+    scale(taille)
+
+    fill(255)
+    triangle(110,235,200,180,200,270) # aile gauche
+    triangle(90,150,180,150,180,250)
+
+    triangle(290,235,200,180,200,270) #aile droite
+    triangle(310,150,210,150,210,260)
+
+    fill(255)  #corps
+    ellipse(200,200,50,150)
+
+    fill(0)  #antennes
+    strokeWeight(3)
+    line(160,90,190,130)
+    line(240,90,210,130)
+
+    scale(1/taille)
+    translate(-posX,-posY)
+
 # Draw
 def draw():
     global fond, liste_etoiles
@@ -532,9 +590,11 @@ def draw():
     # cloud(x = WIDTH // 2, y = HEIGHT // 2, scalar=95, cloud_size=.5, repeat_distance=.31, color_variation=5, cloud_color=(150, 150, 150))
     # tree(x=WIDTH // 2, y=HEIGHT, cloud_size=1.5)
 
-    wheat_field(x = 200, y = 200, width = 400, height = 300, wheat_size = .8)
+    # wheat_field(x = 200, y = 200, width = 400, height = 300, wheat_size = .8)
 
     # Ferme(200, 150, 200, 150,'red','brown','brown',270, 230, 60, 70,'white',220, 180, 40, 40)
 
+    # vache(1, 100, 100)
+    papillon(1, 100, 100)
 
 run()
