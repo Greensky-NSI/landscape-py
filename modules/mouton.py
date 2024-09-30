@@ -1,0 +1,78 @@
+from p5 import *
+
+from utils.assertions import safe_fill
+
+
+def mouton(x, y, couleur_corps = (255, 255, 255), couleur_tete = (255, 255, 255), couleur_yeux = (0, 0, 0), couleur_oreilles = (255, 255, 255),
+           couleur_jambes = (0, 0, 0)):
+    draw_body(x, y, couleur_corps)
+    draw_head(x, y, couleur_tete)
+    draw_eyes(x, y, couleur_yeux)
+    draw_ears(x, y, couleur_oreilles)
+    draw_legs(x, y, couleur_jambes)
+
+def draw_body(x, y, couleur = (255, 255, 255)):
+    """
+    Dessine le corps du mouton
+
+    :param x Coordonnée x du centre du corps
+    :param y Coordonnée y du centre du corps
+    :param couleur Couleur du corps
+    """
+    safe_fill(couleur)  # Couleur du corps (blanc)
+    stroke(0)           # Couleur des contours (noir)
+    strokeWeight(2)     # Épaisseur des contours
+    ellipse(x, y, 100, 60)  # Corps principal
+    ellipse(x - 40, y, 60, 60)  # Avant du corps
+    ellipse(x + 40, y, 60, 60)  # Arrière du corps
+
+def draw_head(x, y, couleur = (255, 255, 255)):
+    """
+    Dessine la tête du mouton
+
+    :param x Coordonnée x du centre de la tête
+    :param y Coordonnée y du centre de la tête
+    :param couleur Couleur de la tête
+    """
+
+    safe_fill(couleur)  # Couleur de la tête (blanc)
+    ellipse(x, y - 40, 50, 50)  # Tête
+
+def draw_eyes(x, y, couleur = (0, 0, 0)):
+    """
+    Dessine les yeux du mouton
+
+    :param x Coordonnée x du centre de la tête
+    :param y Coordonnée y du centre de la tête
+    :param couleur Couleur des yeux
+    """
+
+    safe_fill(couleur)  # Couleur des yeux (noir)
+    ellipse(x - 15, y - 40, 10, 10)  # Œil gauche
+    ellipse(x + 15, y - 40, 10, 10)  # Œil droit
+
+def draw_ears(x, y, couleur = (255, 255, 255)):
+    """
+    Dessine les oreilles du mouton
+
+    :param x Coordonnée x du centre de la tête
+    :param y Coordonnée y du centre de la tête
+    :param couleur Couleur des oreilles
+    """
+    safe_fill(couleur)  # Couleur des oreilles (blanc)
+    triangle(x - 25, y - 50, x - 40, y - 30, x - 10, y - 30)  # Oreille gauche
+    triangle(x + 25, y - 50, x + 40, y - 30, x + 10, y - 30)  # Oreille droite
+
+def draw_legs(x, y, couleur = (0, 0, 0)):
+    """
+    Dessine les pattes du mouton
+
+    :param x Coordonnée x du centre du corps
+    :param y Coordonnée y du centre du corps
+    :param couleur Couleur des pattes
+    """
+    safe_fill(couleur)  # Couleur des pattes (noir)
+    rect(x - 30, y + 20, 10, 30)  # Patte gauche avant
+    rect(x + 20, y + 20, 10, 30)  # Patte droite avant
+    rect(x - 30, y + 50, 10, 30)  # Patte gauche arrière
+    rect(x + 20, y + 50, 10, 30)  # Patte droite arrière
