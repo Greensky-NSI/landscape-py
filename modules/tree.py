@@ -1,5 +1,6 @@
 from p5 import translate, scale, fill, beginShape, vertex, bezier_vertex, endShape, strokeWeight, stroke, line, bezier
 
+from utils.assertions import safe_stroke
 from utils.types import color_type
 from modules.cloud import cloud
 from utils.utils import assert_size_factor, assert_color
@@ -54,7 +55,7 @@ def tree(*, x: int, y: int, tree_size: float = 1, trunc_color: color_type = (131
         ((75, -170), (85, -90))
     )
 
-    stroke((1, 1, 1))
+    safe_stroke((1, 1, 1))
     for p1, p2 in lines:
         x1, y1 = p1
         x2, y2 = p2

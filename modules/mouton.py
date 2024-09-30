@@ -4,13 +4,14 @@ from utils.assertions import safe_fill
 from utils.utils import assert_color
 
 
-def mouton(x, y, couleur_corps = (255, 255, 255), couleur_tete = (255, 255, 255), couleur_yeux = (0, 0, 0), couleur_oreilles = (255, 255, 255),
+def mouton(x, y, taille, couleur_corps = (255, 255, 255), couleur_tete = (255, 255, 255), couleur_yeux = (0, 0, 0), couleur_oreilles = (255, 255, 255),
            couleur_jambes = (0, 0, 0)):
     """
     Dessine un mouton
 
     :param x Coordonnée x du centre du mouton
     :param y Coordonnée y du centre du mouton
+    :param taille Taille du mouton
     :param couleur_corps Couleur du corps
     :param couleur_tete Couleur de la tête
     :param couleur_yeux Couleur des yeux
@@ -26,11 +27,17 @@ def mouton(x, y, couleur_corps = (255, 255, 255), couleur_tete = (255, 255, 255)
     assert assert_color(couleur_jambes), "La couleur des jambes doit être un tuple de 3 entiers"
 
     # Dessin
-    draw_body(x, y, couleur_corps)
-    draw_head(x, y, couleur_tete)
-    draw_eyes(x, y, couleur_yeux)
-    draw_ears(x, y, couleur_oreilles)
-    draw_legs(x, y, couleur_jambes)
+    translate(x, y)
+    scale(taille)
+
+    draw_body(0, 0, couleur_corps)
+    draw_head(0, 0, couleur_tete)
+    draw_eyes(0, 0, couleur_yeux)
+    draw_ears(0, 0, couleur_oreilles)
+    draw_legs(0, 0, couleur_jambes)
+
+    scale(1 / taille)
+    translate(-x, -y)
 
 def draw_body(x, y, couleur = (255, 255, 255)):
     """

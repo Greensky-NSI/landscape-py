@@ -1,6 +1,6 @@
 from typing import Literal, Tuple
 
-from p5 import fill
+from p5 import fill, stroke
 
 from utils.types import color_type
 from utils.utils import assert_color, assert_color_mode
@@ -39,7 +39,7 @@ def parse_color(col: color_type, *, mode: Literal["maximum", "modulo"] = "maximu
 
     # Assertions
     assert mode in ["maximum", "modulo"], "Le mode doit être soit : \"maximum\", \"modulo\""
-    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
+    assert assert_color(col, allow_floats=True), "col doit être un tuple de 3 entiers."
 
     # Analyse
     def colors() -> Tuple[int, int, int]:
@@ -55,9 +55,9 @@ def parse_color(col: color_type, *, mode: Literal["maximum", "modulo"] = "maximu
     else:
         cols = colors()
         if mode == "modulo":
-            return cols[0], cols[1], cols[2], frame_number(col[3], maximum=255)
+            return int(cols[0]), int(cols[1]), int(cols[2]), frame_number(col[3], maximum=255)
         else:
-            return cols[0], cols[1], cols[2], frame_number(col[3], maximum=255, minimum=0)
+            return int(cols[0]), int(cols[1]), int(cols[2]), frame_number(col[3], maximum=255, minimum=0)
 
 
 def increase_color(col: color_type, increaser: int | float, *, mode: Literal["maximum", "modulo"] = "maximum") -> color_type:
@@ -72,7 +72,7 @@ def increase_color(col: color_type, increaser: int | float, *, mode: Literal["ma
     """
 
     # Assertions
-    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
+    assert assert_color(col), "col doit être un tuple de 3 entiers."
     assert isinstance(increaser, int) or isinstance(increaser, float), "increaser doit être un entier ou un réel"
     assert assert_color_mode(mode), "Le mode doit être soit : \"maximum\", \"modulo\""
 
@@ -88,6 +88,18 @@ def safe_fill(col: color_type):
     :return: None
     """
     # Assertions
-    assert assert_color(col), "couleur_corps doit être un tuple de 3 entiers."
+    assert assert_color(col, allow_floats=True), "col doit être un tuple de 3 entiers."
 
     fill(*parse_color(col))
+
+def safe_stroke(col: color_type):
+    """
+    Remplit la couleur donnée en s'assurant qu'elle est valide
+
+    :param col: color_type - La couleur à remplir
+    :return: None
+    """
+    # Assertions
+    assert assert_color(col), "col doit être un tuple de 3 entiers."
+
+    stroke(*parse_color(col))
