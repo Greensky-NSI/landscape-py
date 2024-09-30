@@ -1,5 +1,8 @@
 from p5 import fill, rect, triangle, stroke, line
 
+from utils.assertions import safe_fill
+
+
 def draw_ferme(grgX, grgY, grgl, grgh, grgcl, toitcl):
     """
     La fonction draw_ferme prend six paramètres et dessine la ferme :
@@ -11,11 +14,11 @@ def draw_ferme(grgX, grgY, grgl, grgh, grgcl, toitcl):
     toitcl: La couleur du toit de la ferme
     """
     # Dessiner le corps de la grange (rectangle)
-    fill(grgcl)  # Couleur rouge de la grange
+    safe_fill(grgcl)  # Couleur rouge de la grange
     rect(grgX, grgY, grgh, grgY)  # Position (x, y) et taille (largeur, hauteur)
 
     # Dessiner le toit (triangle)
-    fill(toitcl)  # Couleur marron pour le toit
+    safe_fill(toitcl)  # Couleur marron pour le toit
     triangle((grgX - (grgl * 0.9), grgY), (grgX + (grgl / 2), grgY - (grgh / 2)),
              (grgX + (grgl * 1.1), grgY))  # Sommets du triangle (gauche, centre, droite)
 
@@ -30,7 +33,7 @@ def draw_porte(prtcl,prtX,prtY,prtl,prth):
     prtcl: La couleur du corps de la porte
     """
     # Dessiner la porte
-    fill(prtcl)  # Couleur marron pour la porte
+    safe_fill(prtcl)  # Couleur marron pour la porte
     rect(prtX,prtY,prtl,prth)  # Position (x, y) et taille (largeur, hauteur)
 
 
@@ -44,7 +47,7 @@ def draw_fenetre(fntcl, fntX, fntY, fntl, fnth):
     fntcl: La couleur du corps de la fenêtre
     """
     # Dessiner les fenêtres
-    fill(fntcl)  # Couleur blanche pour les fenêtres
+    safe_fill(fntcl)  # Couleur blanche pour les fenêtres
     rect(fntX, fntY, fntl, fnth)  # Fenêtre gauche
 
     # Dessiner les barres des fenêtres

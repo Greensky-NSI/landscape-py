@@ -2,7 +2,8 @@ from math import floor, sqrt
 from random import randint
 
 from p5 import translate, scale, stroke, strokeWeight, line, noStroke, fill, ellipse, rect
-from main import color_type, wheat_stem_default_color, wheat_cobs_default_color, positions_list
+from utils.constants import wheat_stem_default_color, wheat_cobs_default_color
+from utils.types import color_type, positions_list
 from utils.utils import assert_size_factor, assert_color
 
 def wheat(*, x: int, y: int, wheat_size: float = 1, width: int, height: int, stem_color: color_type = (200, 150, 50), cobs_color: color_type = (255, 205, 105)):

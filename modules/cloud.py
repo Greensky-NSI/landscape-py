@@ -3,8 +3,8 @@ from typing import Literal
 
 from p5 import HALF_PI, fill, translate, scale, noStroke, ellipse, PI, arc, TWO_PI
 
-from main import color_type
-from utils.assertions import increase_color
+from utils.types import color_type
+from utils.assertions import increase_color, safe_fill
 from utils.utils import assert_color, assert_size_factor, assert_color_mode
 
 def cloud(*, x: int = 0, y: int = 0, scalar: int = 100, cloud_color: color_type = (255, 255, 255), cloud_size: float = 1, repeat_distance = .4, repeated: bool = False, color_variation: float = 0, pi_count: int = 0, cloud_color_variation_mode: Literal["modulo", "maximum"] = "modulo"):
@@ -37,10 +37,12 @@ def cloud(*, x: int = 0, y: int = 0, scalar: int = 100, cloud_color: color_type 
     assert assert_color_mode(cloud_color_variation_mode), "cloud_color_variation_mode doit être soit : \"maximum\", \"modulo\""
 
     # Dessin du nuage
-    color_scale_changer = cos(HALF_PI * pi_count) * color_variation
-    computed_color_center = increase_color(cloud_color, color_scale_changer, mode=cloud_color_variation_mode)
+    computed_color_center = cloud_color
+    if color_variation != 0:
+        color_scale_changer = cos(HALF_PI * pi_count) * color_variation
+        computed_color_center = increase_color(cloud_color, color_scale_changer, mode=cloud_color_variation_mode)
 
-    fill(*computed_color_center)
+    safe_fill(computed_color_center)
 
     particles = max(2, min(100, int(scalar / 6)))
     translate(x, y)
@@ -64,10 +66,12 @@ def cloud(*, x: int = 0, y: int = 0, scalar: int = 100, cloud_color: color_type 
         if particle_x > furthest:
             furthest = particle_x
 
-        color_scale_changer = cos(HALF_PI * pi_count) * color_variation
-        computed_color = increase_color(cloud_color, color_scale_changer, mode=cloud_color_variation_mode)
+        computed_color = cloud_color
+        if color_variation != 0:
+            color_scale_changer = cos(HALF_PI * pi_count) * color_variation
+            computed_color = increase_color(cloud_color, color_scale_changer, mode=cloud_color_variation_mode)
 
-        fill(*computed_color)
+        safe_fill(computed_color)
 
         arc(particle_x, particle_y,scalar  + cos(current_number) * 3, scalar + sin(current_number) * 3, 0, TWO_PI)
 

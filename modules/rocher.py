@@ -1,26 +1,34 @@
 from p5 import *
 
 from utils.assertions import safe_fill
-from utils.utils import assert_color
+from utils.utils import assert_color, assert_size_factor
 
 
-def rock(x, y, couleur_rocher = (180, 180, 180), couleur_ombre = (150, 150, 150)):
+def rock(x, y, taille, couleur_rocher = (180, 180, 180), couleur_ombre = (150, 150, 150)):
     """
     Dessine un rocher avec son ombre
 
     :param x Coordonnée x du centre du rocher
     :param y Coordonnée y du centre du rocher
+    :param taille Taille du rocher
     :param couleur_rocher Couleur du rocher
     :param couleur_ombre Couleur de l'ombre
     """
     # Assertions
     assert isinstance(x, int) and isinstance(y, int), "Les coordonnées doivent être des entiers"
+    assert assert_size_factor(taille), "La taille doit être un réel/entier et supérieur à 0"
     assert assert_color(couleur_rocher), "La couleur du rocher doit être un tuple de 3 entiers"
     assert assert_color(couleur_ombre), "La couleur de l'ombre doit être un tuple de 3 entiers"
 
     # Dessin
-    draw_rock(x, y, couleur_rocher)
-    draw_shadow(x, y, couleur_ombre)
+    translate(x, y)
+    scale(taille)
+
+    draw_rock(0, 0, couleur_rocher)
+    draw_shadow(0, 0, couleur_ombre)
+
+    scale(1/taille)
+    translate(-x, -y)
 
 def draw_rock(x, y, couleur = (180, 180, 180)):
     """
