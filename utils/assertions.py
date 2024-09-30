@@ -2,7 +2,7 @@ from typing import Literal, Tuple
 
 from p5 import fill
 
-from main import color_type
+from utils.types import color_type
 from utils.utils import assert_color, assert_color_mode
 
 

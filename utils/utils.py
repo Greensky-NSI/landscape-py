@@ -1,4 +1,5 @@
-from main import color_type
+from utils.types import color_type
+
 
 def assert_color(col: color_type):
     return isinstance(col, tuple) and (len(col) == 3 or len(col) == 4) and all(isinstance(i, int) for i in col)

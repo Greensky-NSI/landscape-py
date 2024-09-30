@@ -3,7 +3,7 @@ from typing import Literal
 
 from p5 import HALF_PI, fill, translate, scale, noStroke, ellipse, PI, arc, TWO_PI
 
-from main import color_type
+from utils.types import color_type
 from utils.assertions import increase_color
 from utils.utils import assert_color, assert_size_factor, assert_color_mode
 

@@ -1,6 +1,6 @@
 from p5 import translate, scale, fill, beginShape, vertex, bezier_vertex, endShape, strokeWeight, stroke, line, bezier
 
-from main import color_type
+from utils.types import color_type
 from modules.cloud import cloud
 from utils.utils import assert_size_factor, assert_color
 

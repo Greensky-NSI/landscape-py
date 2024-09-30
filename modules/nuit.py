@@ -2,7 +2,7 @@ from random import randint
 
 from p5 import fill, ellipse
 
-from globals import variables
+from utils.globals import variables
 from custom_types import *
 
 def etoiles(cielH, liste_etoiles_):
