@@ -4,6 +4,15 @@ from utils.assertions import safe_fill
 
 
 def rock(x, y, couleur_rocher = (180, 180, 180), couleur_ombre = (150, 150, 150)):
+    """
+    Dessine un rocher avec son ombre
+
+    :param x Coordonnée x du centre du rocher
+    :param y Coordonnée y du centre du rocher
+    :param couleur_rocher Couleur du rocher
+    :param couleur_ombre Couleur de l'ombre
+    """
+
     draw_rock(x, y, couleur_rocher)
     draw_shadow(x, y, couleur_ombre)
 

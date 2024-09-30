@@ -5,6 +5,18 @@ from utils.assertions import safe_fill
 
 def mouton(x, y, couleur_corps = (255, 255, 255), couleur_tete = (255, 255, 255), couleur_yeux = (0, 0, 0), couleur_oreilles = (255, 255, 255),
            couleur_jambes = (0, 0, 0)):
+    """
+    Dessine un mouton
+
+    :param x Coordonnée x du centre du mouton
+    :param y Coordonnée y du centre du mouton
+    :param couleur_corps Couleur du corps
+    :param couleur_tete Couleur de la tête
+    :param couleur_yeux Couleur des yeux
+    :param couleur_oreilles Couleur des oreilles
+    :param couleur_jambes Couleur des jambes
+    """
+
     draw_body(x, y, couleur_corps)
     draw_head(x, y, couleur_tete)
     draw_eyes(x, y, couleur_yeux)
