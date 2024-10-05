@@ -17,6 +17,8 @@ from utils.assertions import increase_color, parse_color, safe_fill
 from utils.constants import wheat_cobs_default_color, wheat_stem_default_color
 from utils.globals import variables
 from modules.rocher import rock
+from utils.utils import get_color_from_seed
+
 
 # Code with p5 python
 def setup():
@@ -79,10 +81,20 @@ def draw():
     rock(495, 590, 0.8, increase_color((180, 180, 180), base_rock_color, mode="modulo"), increase_color((150, 150, 150), base_rock_color, mode="modulo"))
 
     # Animaux
+    animals_seed = int(variables["seed"][5:12]) ** 2
     ## Vache
-    vache(.5, 312, 100)
-    vache(.46, 455, 92)
-    vache(.44, 400, 180)
+    cow_color_increaser_constant = int(str(animals_seed)[0]) + 1
+    cow_body_color = parse_color(get_color_from_seed(animals_seed))
+
+    vache(.5, 312, 100, cow_body_color, increase_color(cow_body_color, cow_color_increaser_constant * -4, mode="modulo"), (0, 0, 0), parse_color((255 + cow_body_color[0], 192 + cow_body_color[1], 203 + cow_body_color[2]), mode="modulo"))
+    vache(.46, 455, 92, increase_color(cow_body_color, cow_color_increaser_constant * 2, mode="modulo"), (255, 255, 255), (0, 0, 0), (255, 192, 203), (0, 0, 0), (160, 160, 1600), (255, 255, 255), increase_color((0, 0, 0), cow_color_increaser_constant * 5, mode="modulo"))
+
+    # Le calcul avec une puissance ainsi que (+(un nombre)), permet d'avoir plus ou moins 64, selon la parité de la seed, ce qui permet d'avoir une alternance de couleur
+    #    Vous pouvez faire le test vous-même avec ce petit code :
+    #            a = lambda x: 64 * (2 ** (+(x % 2 == 0) + 1) - 3)
+    #            for i in range(10):
+    #                print(a(i)) # On obtient 64 -64 64 -64...
+    vache(.44, 400, 180, increase_color((255, 255, 255), cow_color_increaser_constant * -1, mode="modulo"), (255, 255, 255), (0, 0, 0), (255, 192, 203), (0, 0, 0), increase_color((160, 130, 100), cow_body_color[0], mode="modulo"), increase_color((128, 128, 128), 64 * (2 ** (+(cow_color_increaser_constant % 2 == 0) + 1) - 3), mode="modulo"), increase_color((0, 0, 0), cow_color_increaser_constant * -3, mode="modulo"))
 
     ## Mouton
     mouton(320, 340, .5)
