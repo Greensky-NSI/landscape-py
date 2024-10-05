@@ -97,7 +97,8 @@ def draw():
     vache(.44, 400, 180, increase_color((255, 255, 255), cow_color_increaser_constant * -1, mode="modulo"), (255, 255, 255), (0, 0, 0), (255, 192, 203), (0, 0, 0), increase_color((160, 130, 100), cow_body_color[0], mode="modulo"), increase_color((128, 128, 128), 64 * (2 ** (+(cow_color_increaser_constant % 2 == 0) + 1) - 3), mode="modulo"), increase_color((0, 0, 0), cow_color_increaser_constant * -3, mode="modulo"))
 
     ## Mouton
-    mouton(320, 340, .5)
+    couleur_mouton = increase_color((100, 100, 100), int(str(animals_seed)[0] + str(animals_seed)[-1]) * 5, mode="maximum")
+    mouton(320, 340, .5, couleur_mouton, increase_color(couleur_mouton, -10, mode="modulo"), (0, 0, 0), couleur_mouton)
 
     ## Papillon
     papillon(.2, 700, 200, (127, 123, 98), increase_color((127, 123, 98), 30))
