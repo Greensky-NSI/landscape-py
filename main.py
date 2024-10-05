@@ -13,7 +13,7 @@ from modules.vache import vache
 from modules.wheat import wheat_field
 from modules.nuit import etoiles, journuit
 from modules.tree import tree
-from utils.assertions import increase_color, parse_color
+from utils.assertions import increase_color, parse_color, safe_fill
 from utils.constants import wheat_cobs_default_color, wheat_stem_default_color
 from utils.globals import variables
 from modules.rocher import rock
@@ -33,6 +33,12 @@ def draw():
 
     # Calculs sur la seed
     seed_sum = sum([int(i) for i in variables["seed"]])
+
+    # Création de la prairie en fond
+    prairie_color_increaser = int(variables["seed"][int(variables["seed"][2])])
+
+    safe_fill(increase_color((20, 150, 20), prairie_color_increaser))
+    rect(0, variables["HEIGHT"] // 2, variables["WIDTH"], variables["HEIGHT"] // 2)
 
     # Calculation de la couleur des rochers
     base_rock_color = int(variables["seed"][-1]) * 10 ** 2 + int(variables["seed"][5]) + floor(cos(seed_sum) * 20)
