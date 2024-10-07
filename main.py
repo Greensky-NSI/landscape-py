@@ -28,9 +28,10 @@ def setup():
 # Draw
 def draw():
     journuit()
-    background(variables["fond"])
+    safe_fill(variables["fond"])
+    rect(0, 0, variables["WIDTH"], variables["HEIGHT"])
 
-    if variables["fond"] == 45:
+    if variables["fond"][0] == 45:
         etoiles(200, variables["liste_etoiles"])
 
     # Calculs sur la seed
@@ -45,16 +46,26 @@ def draw():
     # Calculation de la couleur des rochers
     base_rock_color = int(variables["seed"][-1]) * 10 ** 2 + int(variables["seed"][5]) + floor(cos(seed_sum) * 20)
 
-    # Ferme
+    # Calculation des couleurs des fleurs
+    flowers_color_increaser = floor(1.2 ** seed_sum)
+    flower_tige_base_color = int(variables["seed"][2] + variables["seed"][4]) + 5
+
+    base_tige_color = parse_color((flower_tige_base_color, flower_tige_base_color * 4, flower_tige_base_color), mode="modulo")
+
+    # Décoration de la ferme
+    ## Fleur du rocher de la ferme
+    draw_fleur(184, 248, 9, 5, increase_color((205, 133, 63), 20 + flowers_color_increaser, mode="modulo"), increase_color((255, 105, 180), -100 + flowers_color_increaser, mode="modulo"), increase_color(base_tige_color, flowers_color_increaser + 20, mode="modulo"))
+
+    ## Rocher de la ferme
     rock(207, 282, .4, increase_color((180, 180, 180), base_rock_color, mode="modulo"), increase_color((150, 150, 150), base_rock_color, mode="modulo"))
 
+    # Ferme
     ## Teinte de la ferme
     ferme_teint = parse_color((int(variables["seed"][0:2]), int(variables["seed"][3:5]), int(variables["seed"][6:8])), mode="modulo")
     first_increaser_ferme = (int(variables["seed"][9]) + 50) * 2
     second_increaser_ferme = (int(variables["seed"][10]) + 30) * 2
 
-    Ferme(200, 150, 200, 150, ferme_teint, ferme_teint, increase_color(ferme_teint, second_increaser_ferme, mode="modulo"), 270, 230, 60, 70, increase_color(ferme_teint, first_increaser_ferme, mode="modulo"), 220,
-              180, 40, 40)
+    Ferme(200, 150, 200, 150, ferme_teint, ferme_teint, increase_color(ferme_teint, second_increaser_ferme, mode="modulo"), 270, 230, 60, 70, increase_color(ferme_teint, first_increaser_ferme, mode="modulo"), 220, 180, 40, 40)
 
     # Arbres sur le côté gauche
     ## Récupération de la couleur des arbres selon la seed:
@@ -106,11 +117,8 @@ def draw():
 
 
     # Fleurs
-    flowers_color_increaser = floor(1.2 ** seed_sum)
-
-    draw_fleur(510, 500, 10, 5, increase_color((255, 192, 203), flowers_color_increaser, mode="modulo"), increase_color((255, 105, 180), flowers_color_increaser, mode="modulo"))
-    draw_fleur(112, 466, 8, 6, increase_color((255, 192, 203), -10 + flowers_color_increaser, mode="modulo"), increase_color((255, 105, 180), -70 + flowers_color_increaser, mode="modulo"))
-    draw_fleur(184, 248, 9, 5, increase_color((205, 133, 63), 20 + flowers_color_increaser, mode="modulo"), increase_color((255, 105, 180), -100 + flowers_color_increaser, mode="modulo"))
+    draw_fleur(510, 490, 10, 5, increase_color((255, 192, 203), flowers_color_increaser, mode="modulo"), increase_color((255, 105, 180), flowers_color_increaser, mode="modulo"), increase_color(base_tige_color, flowers_color_increaser, mode="modulo"))
+    draw_fleur(112, 446, 8, 6, increase_color((255, 192, 203), -10 + flowers_color_increaser, mode="modulo"), increase_color((255, 105, 180), -70 + flowers_color_increaser, mode="modulo"), increase_color(base_tige_color, flowers_color_increaser - 10, mode="modulo"))
 
 
     # Nuages

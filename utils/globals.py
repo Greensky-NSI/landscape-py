@@ -3,7 +3,10 @@ from typing import List
 from utils.utils import generate_seed
 
 seed = generate_seed()
-default_fond = (int(seed[0]) * 100 + int(seed[2]) * 10 + int(seed[3])) % 255
+default_fond = [(int(seed[0]) * 100 + int(seed[2]) * 10 + int(seed[3])) % 255] * 3
+
+default_fond[2] = default_fond[2] + 50
+default_fond = tuple(default_fond)
 
 # Variables globales
 variables = {
