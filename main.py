@@ -28,9 +28,10 @@ def setup():
 # Draw
 def draw():
     journuit()
-    background(variables["fond"])
+    safe_fill(variables["fond"])
+    rect(0, 0, variables["WIDTH"], variables["HEIGHT"])
 
-    if variables["fond"] == 45:
+    if variables["fond"][0] == 45:
         etoiles(200, variables["liste_etoiles"])
 
     # Calculs sur la seed
