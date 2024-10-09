@@ -19,8 +19,8 @@ def draw_ferme(grgX, grgY, grgl, grgh, grgcl, toitcl):
 
     # Dessiner le toit (triangle)
     safe_fill(toitcl)  # Couleur marron pour le toit
-    triangle((grgX - (grgl * 0.9), grgY), (grgX + (grgl / 2), grgY - (grgh / 2)),
-             (grgX + (grgl * 1.1), grgY))  # Sommets du triangle (gauche, centre, droite)
+    triangle((grgX -(grgl * 0.3), grgY), (grgX + (grgl / 2), grgY - (grgh / 2)),
+             (grgX +grgl+(grgl * 0.1), grgY))  # Sommets du triangle (gauche, centre, droite)
 
 
 def draw_porte(prtcl,prtX,prtY,prtl,prth):
